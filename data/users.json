@@ -1,0 +1,8 @@
+[
+    {"name":"israel","id":"1","type":"manager","branchName":"Tel Aviv","userName":"is1","password":"1111","valid":"1"},
+    {"name":"israel","id":"1","type":"manager","branchName":"Tel Aviv","userName":"is11","password":"1111","valid":"1"},
+    {"name":"yosef","id":"2","type":"worker","branchName":"Bnei Brak","userName":"yo1","password":"1111","valid":"1"},
+    {"name":"david","id":"3","type":"worker","branchName":"Bat Yam","userName":"da1","password":"1111","valid":"1"},
+    {"name":"jojo","id":"4","type":"customer","branchName":"Jerusalem","userName":"jo2","password":"2222","valid":"1"},
+    {"name":"moshe","id":"5","type":"customer","branchName":"Tel aviv","userName":"mo2","password":"2222","valid":"1"}
+]

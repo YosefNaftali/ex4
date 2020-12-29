@@ -1,0 +1,107 @@
+<style>
+.blogShort{ border-bottom:1px solid #ddd;}
+.add{background: #333; padding: 10%; height: 300px;}
+
+.nav-sidebar { 
+    width: 100%;
+    padding: 8px 0; 
+    border-right: 1px solid #ddd;
+}
+.nav-sidebar a {
+    color: #333;
+    -webkit-transition: all 0.08s linear;
+    -moz-transition: all 0.08s linear;
+    -o-transition: all 0.08s linear;
+    transition: all 0.08s linear;
+}
+.nav-sidebar .active a { 
+    cursor: default;
+    background-color: #34ca78; 
+    color: #fff; 
+}
+.nav-sidebar .active a:hover {
+    background-color: #37D980;   
+}
+.nav-sidebar .text-overflow a,
+.nav-sidebar .text-overflow .media-body {
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis; 
+}
+
+.btn-blog {
+    color: #ffffff;
+    background-color: #37d980;
+    border-color: #37d980;
+    border-radius:0;
+    margin-bottom:10px
+}
+.btn-blog:hover,
+.btn-blog:focus,
+.btn-blog:active,
+.btn-blog.active,
+.open .dropdown-toggle.btn-blog {
+    color: white;
+    background-color:#34ca78;
+    border-color: #34ca78;
+}
+ h2{color:#34ca78;}
+ .margin10{margin-bottom:10px; margin-right:10px;}
+</style>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container">
+	 <div id="blog" class="row">
+                
+                 <div class="col-md-10 blogShort" id="flowerFrame" >
+                     <h1 id="nameOfFlower"></h1>
+                     <img src="images/homeWelcome.jpg" alt="post img" height="100" width="100" class="pull-left img-responsive thumb margin10 img-thumbnail" id="image">
+                     
+                         <em id="price"></em>
+                     <article><p id="textSection">
+                      
+                         </p></article>
+                 
+</div>
+
+<script>
+  $(document).ready(function(){
+    getCatalog();
+    function getCatalog(){
+        fetch('/getcatalog')
+      .then(response=>{
+        return response.json();
+      }).then(data=>{
+       for (i = 0; i < data.length; i++)
+       {
+        document.getElementById("nameOfFlower").innerHTML=data[i].name;
+      document.getElementById("price").innerHTML="Price: "+data[i].price+" Nis";
+      document.getElementById("image").setAttribute("src","images/"+data[i].name+".jpg");
+      //take text from file
+      var nameOfFile = "articles/"+data[i].name+".txt";
+        var rawFile = new XMLHttpRequest();
+         rawFile.open("GET", nameOfFile, false);
+        rawFile.send(null);
+        var allText = rawFile.responseText;    
+        document.getElementById("textSection").innerHTML = allText;
+      var clone = $("#flowerFrame").clone();
+      clone.attr("id", i);
+      clone.find("#nameOfFlower").attr("id",10000+i);
+      clone.find("#price").attr("id",20000+i);
+     //append clone on the end
+      $("#blog").append(clone); 
+
+        }
+        document.getElementById("flowerFrame").remove();
+      })
+     .catch(error=>{
+        console.log(error);
+      });
+    }
+  });
+
+</script>

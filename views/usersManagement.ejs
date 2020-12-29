@@ -1,0 +1,353 @@
+<h3 id="userType"><%= type %></h3>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="addUserBtn">Add</button>
+<table class="table" id="mytable">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">User name</th>
+      <th scope="col">Type</th>
+      <th scope="col">Branch city</th>
+      <th scope="col" id="PasswordInHeadTable">Password</th>
+      <th scope="col" id="emptySpaceForButoon"></th>
+     
+    </tr>
+  </thead>
+  <tbody id = "table">
+      <tr>
+
+      </tr>  
+  </tbody>
+</table>
+<div class="list-group" id="listGroup">
+
+</div>
+
+
+<!-- Modal HTML -->
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add </h5>
+        <button onclick="clearModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Id:</label>
+            <input type="text" class="form-control" id="idModal" value="id" readonly>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Name:</label>
+            <input type="text" class="form-control" id="nameModal" value="name">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Type:</label><br>
+            <select name="userTypesModal" id="userTypesModal">
+                <% if(type == 'manager' || type == 'Manager'){ %>
+                  <option value="Select">Select
+                  <option value="Manager">Manager
+                  <option value="Worker">Worker
+                  <option value="Provider">Provider
+              <% } %>
+              <option value="Customer">Customer
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Branch:</label><br>
+            <select id="branchModal" name="branchModal">
+              <option value="Select">Select  
+              <%for(var branch of branches){%>
+                  <option value="<%=branch.branchCity%>"><%=branch.branchCity%>
+                    <%}%>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">User Name:</label>
+            <input type="text" class="form-control" id="userNameModal" value="">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">New Password:</label>
+            <input type="password" class="form-control" id="passwordModal" value="">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="clearModal()" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" id="deleteModal" data-dismiss="modal">Delete User</button>
+          <button type="button" class="btn btn-primary"  id="updateOrAddModal" data-dismiss="modal">Update User</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  var qaz;
+  i=0;
+  listA =[1,2,3,4,5];
+  var globalItem;
+  var type;
+  var index;
+  var isUpdate = true;
+  var users;
+  var first;
+  $(document).ready(function () {
+    type = document.getElementById('userType').innerHTML;
+    getUsers();
+  });
+  function getUsers() {
+    console.log("105");
+    let items = [];
+    let url = '/'+'getUsers'+"?" + $.param({type: type})
+    fetch(url)
+      .then(response => {
+        console.log("114")
+        return response.json();
+      }).then(data => {
+        users = data;
+        if(type == 'manager' ||type == 'Manager' ){
+          console.log("114");
+                for(i = 0; i < data.length; i++){
+                    var newRow = table.insertRow(i),
+                 //   $('selector').attr('name', 'value');
+                //    newRow.setAttribute("id", "id_you_like");
+                        id = newRow.insertCell(0),
+                        name = newRow.insertCell(1),
+                        userName  = newRow.insertCell(2)
+                        type = newRow.insertCell(3),
+                        branchCity = newRow.insertCell(4),
+                        password  = newRow.insertCell(5)
+                        change  = newRow.insertCell(6)
+                        
+                        
+                        id.innerHTML = data[i].id;
+                        name.innerHTML = data[i].name;
+                        userName.innerHTML = data[i].userName;
+                        type.innerHTML = data[i].type;
+                        branchCity.innerHTML = data[i].branchName;
+                        password.innerHTML = data[i].password;
+                        globalItem=data[i];
+                        change.innerHTML=`<button  onclick="updateOrAddModal(${data[i].id})" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="editUserBtn">Edit</button>`;
+                }
+        }else{ 
+              document.getElementById("PasswordInHeadTable").remove();
+              document.getElementById("emptySpaceForButoon").remove();
+          for(i = 0; i < data.length; i++){
+                    var newRow = table.insertRow(i),
+                        id = newRow.insertCell(0),
+                        name = newRow.insertCell(1),
+                        userName  = newRow.insertCell(2)
+                        type = newRow.insertCell(3),
+                        branchCity = newRow.insertCell(4),
+                
+                        
+                        
+                        id.innerHTML = data[i].id;
+                        name.innerHTML = data[i].name;
+                        userName.innerHTML = data[i].userName;
+                        type.innerHTML = data[i].type;
+                        branchCity.innerHTML = data[i].branchName;
+                   }
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+  function testButton(x) {
+   console.log(x);
+ }
+  //select user
+  function updateOrAddModal(e) {
+    console.log("start func");
+    isUpdate = true;
+    document.getElementById("updateOrAddModal").innerHTML = "Update";
+    document.getElementById("exampleModalLabel").innerHTML = "Edit";
+    document.getElementById("deleteModal").innerHTML ="Delete User";
+    document.getElementById("deleteModal").disabled = false;
+    document.getElementById("idModal").readOnly = true;
+    index = e;
+    console.log("this user id yo update: "+ e)
+    let user = users.find((user)=> user.id == index);
+    if(user){
+    document.getElementById("idModal").value = user.id;
+    document.getElementById("nameModal").value = user.name;
+    document.getElementById("branchModal").value = user.branchName;
+    document.getElementById("userNameModal").value = user.userName;
+    document.getElementById("passwordModal").value =user.password;
+    if (user.type === "manager") {
+      document.getElementById("userTypesModal").selectedIndex = 1;
+    }
+    else {
+      if (user.type === "worker") {
+        document.getElementById("userTypesModal").selectedIndex = 2;
+      }
+      else {
+        if (user.type === "provider") {
+          document.getElementById("userTypesModal").selectedIndex = 3;
+        }
+        else {
+          if (user.type === "customer") {
+            document.getElementById("userTypesModal").selectedIndex = 4;
+          }
+        }
+      }
+    }
+    }
+  }
+
+ //delete user
+  $('#deleteModal').on('click', () => {
+
+    let userId = $("#idModal").val();
+    let rowToDelete = findRowFromId(userId);
+     console.log("this row : "+ rowToDelete );
+    fetch('/deleteUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify({ id: userId })
+    }).then(response => {
+      return response.json();
+    }).then(resulte => {
+      console.log(resulte);
+      if (resulte.message === "Success") {
+        $('#exampleModal').modal('hide');
+        //clear model
+        clearModal();
+    //    console.log(index)
+    //    document.getElementById(index).remove();
+      //  console.log(document.getElementById(mytable).rows[1][0] + "this nimchak ");
+        document.getElementById("mytable").deleteRow(rowToDelete);
+        //getUsers();
+      }
+    })
+      .catch(error => {
+        console.log(error);
+      });
+
+
+  })
+
+  //update user data
+  $("#updateOrAddModal").on('click', () => {
+    let user = {
+      id: "",
+      userName: "",
+      password: "",
+      type: "",
+      branchName: "",
+      name: ""
+    }
+
+    if(isUpdate){
+      user.id = $("#idModal").val();
+    }
+    user.userName = $("#userNameModal").val();
+    user.password = $("#passwordModal").val();
+    user.type = $("#userTypesModal").val().toLowerCase();
+    user.branchName = $("#branchModal").val();
+    user.name = $("#nameModal").val();
+    
+    if (user.userName == "") {
+      alert("User Name Cant Be Empty")
+      return;
+    }
+    if (user.password == "") {
+      alert("Password To Short")
+      return;
+    }
+    if (user.branchName == "") {
+      alert("pleas Check Branch")
+      return;
+    }
+    if (user.name == "") {
+      alert("Pleas Enter Valid Name");
+      return;
+    }
+    if (user.type == "") {
+      alert("Pleas Enter Users Type")
+      return;
+    }
+    let url='';
+    if(isUpdate){
+      url= '/updateUser'
+    }else if(!isUpdate){
+       url = '/addUser'
+    }
+      console.log(url);
+      console.log("לפני הפאץ'");
+      //Update the data to the serve
+      fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(user)
+          }).then(response => {
+            return response.json();
+          }).then(resulte => {
+            console.log(resulte);
+            if (resulte.message === "Success") {
+              $('#exampleModal').modal('hide');
+              console.log("אחרי הפאץ'");
+              //clear model
+              clearModal();
+              console.log(resulte.user+" start getUsers...  ");
+              //TO DO -- refresh the page..
+            //  getUsers();
+              console.log("אחרי getUsers'");
+
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+      }
+    );
+
+  $("#addUserBtn").on('click', () => {
+    //clear model
+    clearModal();
+   
+    document.getElementById("exampleModalLabel").innerHTML = "Add";
+    document.getElementById("updateOrAddModal").innerHTML = "Add User";
+    document.getElementById("deleteModal").disabled = true;
+    document.getElementById("updateOrAddModal").disabled = false;
+    isUpdate = false;
+
+  }
+  );
+
+  //clean modal
+  function clearModal(){
+    document.getElementById("idModal").value = "";
+    document.getElementById("nameModal").value = "";
+    document.getElementById("branchModal").selectedIndex = 0;
+    document.getElementById("userNameModal").value = "";
+    document.getElementById("passwordModal").value = "";
+  }
+
+  function findRowFromId(x){
+    var table = document.getElementById("mytable");
+    for (var i = 0, row; row = table.rows[i]; i++) {
+      console.log(x+":"+row.cells[0].innerHTML);
+      console.log("func "+i);
+      if(row.cells[0].innerHTML==x){
+        console.log("func "+i);
+        return i;
+       }
+      
+    }
+    console.log("func ended ");
+    var z1= document.getElementById("mytable").rows[1];
+   console.log(z1.cells[1].innerHTML);
+  }
+</script>

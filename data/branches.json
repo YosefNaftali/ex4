@@ -1,0 +1,7 @@
+[
+              {"branchCity":"Bat Yam", "number":"1", "phone":"03-35353535","active":"yes"},
+              {"branchCity":"Jerusalem", "number":"2", "phone":"03-35353535","active":"yes"},
+              {"branchCity":"Ofakim", "number":"3", "phone":"03-35353535","active":"yes"},
+              {"branchCity":"Bnei Brak", "number":"4", "phone":"03-35353535","active":"yes"},
+              {"branchCity":"Tel Aviv","number":"5", "phone":"03-35353535","active":"yes"}
+]
