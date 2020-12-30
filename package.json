@@ -7,7 +7,9 @@
     "addUser": "node ./add_delete/addUser.js",
     "listUsers": "node ./add_delete/listusers.js",
     "removeUser": "node ./add_delete/removeUser.js",
-    "addFlower": "node ./add_delete/addFlower.js"
+    "addFlower": "node ./add_delete/addFlower.js",
+    "updateFlower": "node ./add_delete/updateFlower.js",
+    "deleteFlower": "node ./add_delete/deleteFlower.js"
 
   },
   "dependencies": {

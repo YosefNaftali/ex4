@@ -33,5 +33,5 @@ debug('Pending DB connection');
 require("./users")(db);
 //require("./todo")(db);
  require("./flowers")(db);
-// require("./customer")(db);
+ require("./branches")(db);
 module.exports = model => db.model(model);

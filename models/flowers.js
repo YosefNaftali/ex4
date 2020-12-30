@@ -6,7 +6,7 @@ module.exports = db => {
     let schema = new mongo.Schema({
         name: { type: String, required: true },
         price: { type: String, required: true },
-     //   picture: { type: String, required: true },
+        picture: { type: String, required: false },
         created_at: Date,
         updated_at: Date
     }, { autoIndex: false });
@@ -69,41 +69,27 @@ module.exports = db => {
 
     schema.statics.UPDATE = async function (flower) {
         console.log("flower to update: ", flower);
-        if (flower.hasOwnProperty("picture")) {
-            return this.updateOne({ "name": flower.editFlowerID, "flag": true }, {
-                $set: {
-                    "name": flower.editFlowerName, "price": flower.editFlowerPrice, "picture": flower.picture, updated_at: new Date()
-                }, function() {
-                    setTimeout(function () {
-                        res.status(200).send();
-                    }, 100)
-                }
-            });
-        } else {
-            return this.updateOne({ "id": flower.editFlowerID, "flag": true }, {
-                $set: {
-                    "name": flower.editFlowerName, "price": flower.editFlowerPrice, updated_at: new Date()
-                }, function() {
-                    setTimeout(function () {
-                        res.status(200).send();
-                    }, 100)
-                }
-            });
-        }
-    }
+        let flowersss = this.findOneAndUpdate({name: flower.name },  
+            flower, null, function (err, docs) { 
+            if (err){ 
+                console.log(err) 
+            } 
+            else{ 
+                console.log("Original flower : ",docs); 
+            } 
+        }); 
+    };
 
     schema.statics.DELETE = async function (flower) {
-        return this.updateOne({ "id": flower.id },
-            {
-                $set: {
-                    updated_at: new Date(), flag: false
-                },
-                function() {
-                    setTimeout(function () {
-                        res.status(200).send();
-                    }, 100)
-                }
-            });
+      let item = this.findOneAndDelete({name: flower.name}, function (err, docs) { 
+         if (err){ 
+             console.log(err) 
+           } 
+         else{ 
+            console.log("Deleted flower : ", docs); 
+        } 
+        }); 
+    
     }
 
     db.model('flowers', schema);
