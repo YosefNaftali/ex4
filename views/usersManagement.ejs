@@ -1,4 +1,5 @@
 <h3 id="userType"><%= type %></h3>
+<h3 id="curUser" hidden><%= curUser %></h3>
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="addUserBtn">Add</button>
 <table class="table" id="mytable">
   <thead>
@@ -99,6 +100,8 @@
   var first;
   $(document).ready(function () {
     type = document.getElementById('userType').innerHTML;
+    curuser = document.getElementById('curUser').innerHTML;
+    document.getElementById('curUser').hidden;
     getUsers();
   });
   function getUsers() {

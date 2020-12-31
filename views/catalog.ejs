@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<h3 id="curUserName" hidden><%= curUser.userName %></h3>
+<h3 id="curUserPassword" hidden><%= curUser.password %></h3>
+
 <html>
 <head>
 <style>
@@ -38,6 +41,8 @@ div.desc {
 </style>
 </head>
 <body>
+
+<button class ="btn-block" data-toggle="modal" data-target="#addFlowerModal" id="addFlowerBtn">Add flower </button>
 <div id="mainDiv">
 
 <div class= "row" id="mainRow"> 
@@ -51,6 +56,8 @@ div.desc {
 </body>
 <script>
     $(document).ready(function(){
+      // TO_DO: if you manager show button add for form add-flower
+      
       getCatalog();
       function getCatalog(){
           fetch('/getcatalog')
@@ -70,7 +77,8 @@ div.desc {
             
             var imgCard = document.createElement("img");
             imgCard.setAttribute("id", "image"+i);
-            imgCard.setAttribute("src","images/"+data[i].name+".jpg");
+            imgCard.setAttribute("src",data[i].picture);
+           // imgCard.setAttribute("src","images/"+data[i].name+".jpg");
             imgCard.setAttribute("width","300");
             imgCard.setAttribute("height","200");
 
@@ -113,8 +121,126 @@ div.desc {
           console.log(error);
         });
       }
+
+      
     });
   
+    $("#editFlowerBtn").on('click', () => {
+      console.log("the user type: ",userDetails.type)
+    
+    let curuserName = document.getElementById('curUserName').innerHTML;
+    let curuserPassword = document.getElementById('curUserPassword').innerHTML;
+
+    // TO_DO extrat from curuser the name and password
+    console.log("cur user: "+ curuserName)
+   // console.log(JSON.stringify(curuser))
+   
+   // console.log(curuser["userName"])
+    let isUpdate =false;
+    let flower = {
+      name: "",
+      price: "",
+      picture: "",  
+    }
+
+    /*   if(isUpdate){
+      user.id = $("#idModal").val();
+    } */
+    flower.name = $("#nameFlowerModal").val();
+    flower.price = $("#priceFlowerModal").val();
+    flower.picture = $("#pictureFlowerdModal").val()
+    
+    if (flower.name == "") {
+      alert("flower name Cant Be Empty")
+      return;
+    }
+    if ( flower.price == "") {
+      alert(" flower price  Cant Be Empty")
+      return;
+    }
+    if (flower.picture == "") {
+      alert("flower.picture  Cant Be Empty")
+      return;
+    }
+    let url='';
+    if(isUpdate){
+      url= '/updateFlower'+"?"+$.param({user: curuserName, pass: curuserPassword}) //+ $.param({user: curuser.userName, pass: curuser.password})
+    }else if(!isUpdate){
+       url = '/addFlower'+"?" +$.param({user: curuserName, pass: curuserPassword})
+    }
+      console.log(url);
+      console.log("לפני הפאץ'");
+      console.log("req.body: ", flower);
+      //Update the data to the serve
+      fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+            body: flower
+          }).then(response => {
+            return response.json();
+          }).then(resulte => {
+            console.log(resulte);
+            if (resulte.message === "Success") {
+              $('#addFlowerModal').modal('hide');
+              console.log("אחרי הפאץ'");
+              //clear model
+              clearModal();
+              //console.log(resulte.user+" start getUsers...  ");
+              //TO DO -- refresh the page..
+            //  getUsers();
+            //  console.log("אחרי getUsers'");
+
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+  }
+  ); 
+ 
   </script>
+  
+<!-- Modal HTML -->
+
+<!-- Modal HTML -->
+
+<div class="modal fade" id="addFlowerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add new flower</h5>
+         <button onclick="clearModal()" type="button" class="close" data-dismiss="modal" aria-label="Close"> 
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm" class="form-container new-user-form-container">
+
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Name:</label>
+            <input type="text" class="form-control" id="nameFlowerModal" value="enter a name">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Price:</label>
+            <input type="text" class="form-control" id="priceFlowerModal" value="enter a price">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">picture:</label>
+            <input type="file" class="form-control" id="pictureFlowerdModal" value="load a picture">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="clearModal()" data-dismiss="modal">Close</button>
+          <!-- <button type="button" class="btn btn-secondary" id="deleteModal" data-dismiss="modal">Delete User</button> -->
+          <button  class="btn btn-primary"  data-dismiss="modal" type="submit"  id="editFlowerBtn">Update User</button>
+      </div>
+    </div>
+  </div>
+</div>
+
   
 </html>

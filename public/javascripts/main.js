@@ -27,11 +27,11 @@ function parseRequestURL(){
 }
 
 
-
+let userDetails;
 $(document).ready(function(){
     
        //     
-       let userDetails = {
+        userDetails = {
         userName: '',
         password:'',
         type:''
@@ -166,6 +166,10 @@ $(document).ready(function(){
              });
         $("#login").show();
     });
+
+       // script for add modal
+    //update user data
+ 
 
 
 });

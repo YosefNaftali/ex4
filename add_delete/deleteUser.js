@@ -14,7 +14,7 @@ const timeout = require('../timeout');
         user[0] = await prompt("Please enter user's id to remove : ");
         console.log(user);
         try {
-            await User.REMOVE({
+            await User.DELETE({
                 
                 id:   user[0]
         

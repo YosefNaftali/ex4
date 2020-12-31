@@ -6,10 +6,13 @@
     "start": "node ./bin/www",
     "addUser": "node ./add_delete/addUser.js",
     "listUsers": "node ./add_delete/listusers.js",
-    "removeUser": "node ./add_delete/removeUser.js",
+    "deleteUser": "node ./add_delete/deleteUser.js",
     "addFlower": "node ./add_delete/addFlower.js",
     "updateFlower": "node ./add_delete/updateFlower.js",
-    "deleteFlower": "node ./add_delete/deleteFlower.js"
+    "deleteFlower": "node ./add_delete/deleteFlower.js",
+    "addBranch": "node ./add_delete/addBranch.js",
+    "deleteBranch": "node ./add_delete/deleteBranch.js",
+    "updateBranch": "node ./add_delete/updateBranch.js"
 
   },
   "dependencies": {

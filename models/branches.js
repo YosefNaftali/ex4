@@ -29,6 +29,71 @@ module.exports = db => {
     };
 
 // TODO//
+schema.statics.REQUEST = async function () {
+    const args = Array.from(arguments);
+    if (args.length === 0) {
+        debug("request: no arguments - bring all at once");
+        return this.find({}).exec();
+    }
+
+    let callback = arguments[arguments.length - 1];
+    if (callback instanceof Function) {
+        let asynch = callback.constructor.name === 'AsyncFunction';
+        debug(`request: with ${asynch ? 'async' : 'sync'} callback`);
+        args.pop();
+        let cursor, Flower;
+        try {
+            cursor = await this.find(...args).cursor();
+        } catch (err) { throw err; }
+        try {
+            while (null !== (Flower = await cursor.next())) {
+                if (asynch) {
+                    try {
+                        await callback(Flower);
+                    } catch (err) { throw err; }
+                }
+                else {
+                    callback(Flower);
+                }
+            }
+        } catch (err) { throw err; }
+        return;
+    }
+
+    if (args.length === 1 && typeof args[0] === "string") {
+        debug("request: by ID");
+        return this.findById(args[0]).exec();
+    }
+
+    debug(`request: without callback: ${JSON.stringify(args)}`);
+    return this.find(...args).exec();
+};
+
+schema.statics.UPDATE = async function (branch) {
+    console.log("branch to update: ", branch);
+    let branchhh = this.findOneAndUpdate({number: branch.number},  
+        branch, null, function (err, docs) { 
+        if (err){ 
+            console.log(err) 
+        } 
+        else{ 
+            console.log("Original branch : ",docs); 
+        } 
+    }); 
+};
+
+schema.statics.DELETE = async function (branch) {
+    let item = this.findOneAndDelete({number: branch.number}, function (err, docs) { 
+       if (err){ 
+           console.log(err) 
+         } 
+       else{ 
+          console.log("Deleted branch : ", docs); 
+      } 
+      }); 
+  
+  }
+
 
     db.model('branches', schema);
     debug("branches model created");

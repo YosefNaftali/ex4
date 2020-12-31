@@ -5,7 +5,9 @@ const flowerControll = require('../controlles/flowerControl')
 
 //get catalog page
 router.get('/catalog' ,flowerControll.catalog);
-  //Get users
+  //Get catalog
 router.get('/getcatalog',flowerControll.getCatalog);
+//add flower
+router.post('/addFlower',flowerControll.addFlower);
 
  module.exports = router;

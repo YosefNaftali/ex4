@@ -87,7 +87,7 @@ module.exports = db => {
         }); 
     };
     
-    schema.statics.REMOVE = async function(userToUptate) {
+    schema.statics.DELETE = async function(userToUptate) {
         let user = this.findOneAndDelete({id: userToUptate.id}, function (err, docs) { 
             if (err){ 
                 console.log(err) 

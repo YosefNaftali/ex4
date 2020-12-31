@@ -1,6 +1,7 @@
 //to-do: delete this 
 //let users = require('../data/users');
-let branches = require('../data/branches');
+//let branches = require('../data/branches');
+const branches = require('../models')("branches"); 
 //
 const debug = require("debug")("mongo:listusers");
 const User = require('../models')("users");  
@@ -72,7 +73,7 @@ const getUsers = async function(req,res,next){
 
 const removeUser = async function(req,res,next){
     try {
-        await User.REMOVE(req.body);
+        await User.DELETE(req.body);
         console.log('User id to remove:' + Object.values(req.body));
     } catch(err) { throw err; }
    console.log(req.body);
@@ -122,7 +123,8 @@ const usersManagement = async function(req,res,next){
       console.log("the user type is: "+user.type);
       if(user&&(user.type === 'manager'|| user.type ==='worker' || user.type ==='Manager'||user.type ==='Worker')){
         console.log("I'M in the if------------------------------------- : ");
-          res.render('usersManagement',{users:user,branches:branches,type:user.type})
+          let allBranches= await branches.REQUEST();
+          res.render('usersManagement',{users:user,branches:allBranches,type:user.type, curUser:user})
       }
       else{
         console.log("there is no muth in DB or type rong")
