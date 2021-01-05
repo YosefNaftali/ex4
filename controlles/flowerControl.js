@@ -1,11 +1,15 @@
-//td
-// let users = require('../data/users');
-// let flowers = require('../data/flowers');
-//
-var formidable = require('formidable');
+let multer = require('multer');
+let fs = require("fs");
+//let download = require('image-downloader');
+let path = './public/images';
+let storage = multer.memoryStorage();
+let upload = multer({ storage: storage });
+
+//simcha: var formidable = require('formidable');
+
 const User = require('../models')("users"); 
 const flowers = require('../models')("flowers"); 
-var fs = require('fs');
+
 
 const catalog= async (req,res)=>{
   try{

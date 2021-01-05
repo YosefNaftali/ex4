@@ -8,6 +8,15 @@ var logger = require('morgan');
 var bodyParser = require("body-parser");
 
 
+
+
+
+//let passport = require('passport');
+//let session = require('express-session');
+//let favicon = require('serve-favicon');
+
+
+
 /*
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
@@ -40,7 +49,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(bodyParser.urlencoded({extended: true}));//
+//app.use(bodyParser.urlencoded({extended: true}));//
+
+// set body-parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    extended: true
+}));
+
+// set favicon
+//app.use(favicon(path.join(__dirname, 'public/images', 'brand-logo.ico')));
 
 var flowerRoute = require('./routes/flowerRoute');
 var loginRoute = require('./routes/loginRoute');

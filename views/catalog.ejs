@@ -124,6 +124,13 @@ div.desc {
 
       
     });
+
+
+
+
+
+
+
   
     $("#editFlowerBtn").on('click', () => {
       console.log("the user type: ",userDetails.type)
@@ -199,10 +206,39 @@ div.desc {
             })
             .catch(error => {
               console.log(error);
-            });
+            });        
   }
   ); 
- 
+
+  $("form#editForm").submit(async function(e)  {
+    console.log("blalbal- submit clicked")
+   // $(".cover").show();
+    e.preventDefault();    
+    var formData = new FormData(this);
+    console.log("we start fetch submit clicked")
+    let res = await fetch('/addFlower', {
+                        method: 'POST',
+                        
+                        body: formData
+                    });
+    console.log("res.status is: ",res.status)
+    if (res.status === 403) {
+      console.log("we got 403 from fetch")
+     //   removeErrMsg();
+     //   $(".modal-body").prepend(`<p style="color: red" id="errMsg">The product already exists in the system</p>`);
+    } else {
+        if (res.status !== 200) {
+          console.log("we got 200 from fetch")
+           // if (!$("#errMsg").length) {
+            //    $(".modal-body").prepend(`<p style="color: red" id="errMsg">an error has occurred please try again</p>`);
+          //  }
+        } else {
+            $('#addFlowerModal').modal('hide');
+            console.log("we return from fetch")
+            //window.location.reload();
+        }
+    }
+  });
   </script>
   
 <!-- Modal HTML -->
@@ -220,22 +256,24 @@ div.desc {
         </button>
       </div>
       <div class="modal-body">
-        <form  id="editForm" class="form-container new-user-form-container" method="POST" enctype="multipart/form-data"
-        onsubmit="return false">
+        <form  id="editForm" class="form-container new-user-form-container" action="/products/add" method="post" enctype="multipart/form-data">
 
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">Name:</label>
-            <input type="text" class="form-control" id="nameFlowerModal" value="enter a name">
+            <input type="text" class="form-control" id="nameFlowerModal" value="enter a name" name="Description">
           </div>
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">Price:</label>
-            <input type="text" class="form-control" id="priceFlowerModal" value="enter a price">
+            <input type="text" class="form-control" id="priceFlowerModal" value="enter a price" name="Price">
           </div>
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">picture:</label>
-            <input type="file" accept="image/*" class="form-control" id="pictureFlowerdModal" value="load a picture">
-            <button type="submit" class="btn" id="editFlowerBtn">Update Flower</button>
-          </div>
+          <div class="form-group files">
+            <input type="file" class="file-upload" name="myImage" accept="image/*"
+            data-browse-on-zone-click="true" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <input type="submit" class="btn btn-submit" id="btn-add-product" value="Add Product">
+       </div>
         </form>
       </div>
       <div class="modal-footer">
