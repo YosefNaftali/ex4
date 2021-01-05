@@ -130,119 +130,8 @@ div.desc {
 
 
 
-
-  
-    $("#editFlowerBtn").on('click', () => {
-      console.log("the user type: ",userDetails.type)
-    
-    let curuserName = document.getElementById('curUserName').innerHTML;
-    let curuserPassword = document.getElementById('curUserPassword').innerHTML;
-
-    // TO_DO extrat from curuser the name and password
-    console.log("cur user: "+ curuserName)
-   // console.log(JSON.stringify(curuser))
-   
-   // console.log(curuser["userName"])
-    let isUpdate =false;
-    let flower = {
-      name: "",
-      price: "",
-      picture: "",  
-    }
-
-    /*   if(isUpdate){
-      user.id = $("#idModal").val();
-    } */
-    flower.name = $("#nameFlowerModal").val();
-    flower.price = $("#priceFlowerModal").val();
-    flower.picture = $("#pictureFlowerdModal").val()
-    
-    if (flower.name == "") {
-      alert("flower name Cant Be Empty")
-      return;
-    }
-    if ( flower.price == "") {
-      alert(" flower price  Cant Be Empty")
-      return;
-    }
-    if (flower.picture == "") {
-      alert("flower.picture  Cant Be Empty")
-      return;
-    }
-    let url='';
-    if(isUpdate){
-      url= '/updateFlower'+"?"+$.param({user: curuserName, pass: curuserPassword}) //+ $.param({user: curuser.userName, pass: curuser.password})
-    }else if(!isUpdate){
-       url = '/addFlower'+"?" +$.param({user: curuserName, pass: curuserPassword})
-    }
-      console.log(url);
-      console.log("לפני הפאץ'");
-      console.log("req.body: ", flower);
-      var form = $('#editForm').get(0);
-                console.log("edit flower btn ");
-                var formdata = new FormData(form);
-                console.log(formdata);
-      //Update the data to the serve
-      fetch(url, {
-            method: 'POST',
-            body: form,
-            processData: false,
-            contentType: false,
-          }).then(response => {
-            return response.json();
-          }).then(resulte => {
-            console.log(resulte);
-            if (resulte.message === "Success") {
-              $('#addFlowerModal').modal('hide');
-              console.log("אחרי הפאץ'");
-              //clear model
-              clearModal();
-              //console.log(resulte.user+" start getUsers...  ");
-              //TO DO -- refresh the page..
-            //  getUsers();
-            //  console.log("אחרי getUsers'");
-
-              }
-            })
-            .catch(error => {
-              console.log(error);
-            });        
-  }
-  ); 
-
-  $("form#editForm").submit(async function(e)  {
-    console.log("blalbal- submit clicked")
-   // $(".cover").show();
-    e.preventDefault();    
-    var formData = new FormData(this);
-    console.log("we start fetch submit clicked")
-    let res = await fetch('/addFlower', {
-                        method: 'POST',
-                        
-                        body: formData
-                    });
-    console.log("res.status is: ",res.status)
-    if (res.status === 403) {
-      console.log("we got 403 from fetch")
-     //   removeErrMsg();
-     //   $(".modal-body").prepend(`<p style="color: red" id="errMsg">The product already exists in the system</p>`);
-    } else {
-        if (res.status !== 200) {
-          console.log("we got 200 from fetch")
-           // if (!$("#errMsg").length) {
-            //    $(".modal-body").prepend(`<p style="color: red" id="errMsg">an error has occurred please try again</p>`);
-          //  }
-        } else {
-            $('#addFlowerModal').modal('hide');
-            console.log("we return from fetch")
-            //window.location.reload();
-        }
-    }
-  });
   </script>
   
-<!-- Modal HTML -->
-
 <!-- Modal HTML -->
 
 <div class="modal fade" id="addFlowerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -256,8 +145,7 @@ div.desc {
         </button>
       </div>
       <div class="modal-body">
-        <form  id="editForm" class="form-container new-user-form-container" action="/products/add" method="post" enctype="multipart/form-data">
-
+        <form  id="editForm" class="form-container new-user-form-container" action="/uploadfile" enctype="multipart/form-data" method="POST">
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">Name:</label>
             <input type="text" class="form-control" id="nameFlowerModal" value="enter a name" name="Description">
@@ -267,19 +155,13 @@ div.desc {
             <input type="text" class="form-control" id="priceFlowerModal" value="enter a price" name="Price">
           </div>
           <div class="form-group files">
-            <input type="file" class="file-upload" name="myImage" accept="image/*"
-            data-browse-on-zone-click="true" />
+            <input type="file" name="myFile" />
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <input type="submit" class="btn btn-submit" id="btn-add-product" value="Add Product">
+          <input type="submit" value="Upload a file" class="btn btn-submit" id="btn-add-product" >
        </div>
         </form>
-      </div>
-      <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="clearModal()" data-dismiss="modal">Close</button>
-          <!-- <button type="button" class="btn btn-secondary" id="deleteModal" data-dismiss="modal">Delete User</button> -->
-          <button  class="btn btn-primary"  data-dismiss="modal" type="submit"  id="editFlowerBtn">Update User</button>
       </div>
     </div>
   </div>

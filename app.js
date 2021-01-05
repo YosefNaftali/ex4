@@ -11,6 +11,7 @@ var bodyParser = require("body-parser");
 
 
 
+
 //let passport = require('passport');
 //let session = require('express-session');
 //let favicon = require('serve-favicon');
@@ -49,16 +50,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.use(bodyParser.urlencoded({extended: true}));//
+app.use(bodyParser.urlencoded({extended: true}))
 
-// set body-parser
+
+
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-    extended: true
-}));
 
-// set favicon
-//app.use(favicon(path.join(__dirname, 'public/images', 'brand-logo.ico')));
+
 
 var flowerRoute = require('./routes/flowerRoute');
 var loginRoute = require('./routes/loginRoute');
@@ -100,10 +98,9 @@ app.use('/getBranches', getBranchesRouter);
 app.get('/', function (req, res) {
   res.render('index');
  });
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+
+
+
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -115,6 +112,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 module.exports = app;
 

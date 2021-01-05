@@ -1,11 +1,3 @@
-let multer = require('multer');
-let fs = require("fs");
-//let download = require('image-downloader');
-let path = './public/images';
-let storage = multer.memoryStorage();
-let upload = multer({ storage: storage });
-
-//simcha: var formidable = require('formidable');
 
 const User = require('../models')("users"); 
 const flowers = require('../models')("flowers"); 
@@ -47,56 +39,25 @@ const getCatalog= async (req,res)=>{
 
 const addFlower= async (req,res)=>{
   try{
-    console.log("add flower")
-    var form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-      console.log(files)
-      console.log(files.IncomingForm)
-    /*   var oldpath = files.filetoupload.path;
-      var newpath = 'C:/' + files.filetoupload.name;
-      fs.rename(oldpath, newpath, function (err) {
-        if (err) throw err;
-        res.write('File uploaded and moved!');
-        res.end();
-      }); */
- });
+    
+    console.log("req.file:")
+    console.log(req.file)
+    console.log("req.body: ",req.body)
+    console.log(req.body.Description)
+    let flower = {
+      name : req.body.Description,
+      price :req.body.Price, 
+      picture : 'images\\'+req.body.Description +".jpg",      
 
-    /*
-function (req, res) {
-  
-    var form = new formidable.IncomingForm();
-    form.parse(req, function (err, fields, files) {
-      res.write('File uploaded');
-      res.end();
-    });
-  
-}
-*/
-
-    console.log( req.fields, '\n', req.files);
-    let updatedFlower = req.fields;
-    var imageFile = req.files.myImage;
-    console.log("files: ", imageFile.size);
-    console.log("fields: ", updatedFlower);
-/* 
-    let users= await User.REQUEST();
-    let user = users.find((user)=>user.userName == req.query.user && user.password == req.query.pass );
-    console.log(JSON.stringify(req.body))
-    console.log(user)
-    //console.log(user.type)
-    if(req.body && user &&(user.type === 'manager'|| user.type ==='Manager')){
-      console.log(req.body)
-      let item = {
-        name: req.body.name,
-        price: req.body.price,
-        picture: req.body.picture
-      }
-      await flowers.create(item)
     }
-    else{
-      console.log("add flower error - pass||user||req.body")
+    const file = req.file
+    if (!file) {
+      const error = new Error('Please upload a file')
+      error.httpStatusCode = 400
+      return next(error)
     }
-     */
+    await flowers.create(flower);
+    res.send(file)
     
   }catch (err) { debug(`Failed: ${err}`) }
    

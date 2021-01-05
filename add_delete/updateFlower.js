@@ -20,7 +20,7 @@ const timeout = require('../timeout');
             await flowers.UPDATE({
                 name: flower[0],
                 price:   flower[1],
-                picture:   flower[1],
+                picture:   flower[2],
             
         
             });
