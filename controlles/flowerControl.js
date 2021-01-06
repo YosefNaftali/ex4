@@ -1,4 +1,4 @@
-
+const debug = require("debug")("mongo:listusers");
 const User = require('../models')("users"); 
 const flowers = require('../models')("flowers"); 
 
@@ -15,15 +15,7 @@ const catalog= async (req,res)=>{
     }
     
   }catch (err) { debug(`Failed: ${err}`) }
-  /*
-
-    let user = users.find((user)=>user.userName == req.query.user);
-    if(user){
-      res.render('catalog');
-    }else{
-      res.redirect ('home');
-    }
-    */
+  
 }
 const getCatalog= async (req,res)=>{
   try{
@@ -43,22 +35,24 @@ const addFlower= async (req,res)=>{
     console.log("req.file:")
     console.log(req.file)
     console.log("req.body: ",req.body)
-    console.log(req.body.Description)
     let flower = {
       name : req.body.Description,
       price :req.body.Price, 
       picture : 'images\\'+req.body.Description +".jpg",      
 
     }
+    console.log("the item to DB: ",flower)
     const file = req.file
     if (!file) {
       const error = new Error('Please upload a file')
       error.httpStatusCode = 400
       return next(error)
     }
-    await flowers.create(flower);
-    res.send(file)
     
+    await flowers.create(flower);
+    console.log("im done adding ");
+    res.status(200).send({message:'Success'});
+    console.log("im done adding and send response");
   }catch (err) { debug(`Failed: ${err}`) }
    
 }

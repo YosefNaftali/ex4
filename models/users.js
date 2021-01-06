@@ -1,6 +1,4 @@
-/*
 
-*/
 const debug = require("debug")("mongo:model-user");
 const mongo = require("mongoose");
 

@@ -126,7 +126,28 @@ div.desc {
     });
 
 
-
+    $("form#editForm").submit(async function(e)  {
+    
+    e.preventDefault();    // prevent submit btn action
+    var formData = new FormData(this);
+    console.log("we start fetch submit clicked")
+    let res = await fetch('/uploadfile', {
+                        method: 'POST',
+                        
+                        body: formData
+                    });
+    console.log("res.status is: ",res.status)
+    if (res.status === 403) {
+      console.log("we got 403 from fetch")
+     } else {
+        if (res.status !== 200) {
+          console.log("we not got 200 from fetch")
+        } else {
+            $('#addFlowerModal').modal('hide');
+            console.log("we return from fetch with status 200")
+        }
+    }
+  });
 
 
 

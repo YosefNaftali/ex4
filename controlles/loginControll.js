@@ -1,6 +1,4 @@
-//td
-// let users = require('../data/users');
-//
+const debug = require("debug")("mongo:listusers");
  const User = require('../models')("users"); 
 
 
@@ -28,24 +26,6 @@ const login= async(req,res)=>{
           });
       }
     }catch (err) { debug(`Failed: ${err}`) }
-    
-/*
-    let userName = users.find( ({userName}) => userName == req.body.userName);
-    if(!userName){
-      res.status(401).send({
-        message:'User Name Not Exsist'
-      })
-    }else if(userName.password !== req.body.password){
-      res.status(409).send({
-        message:'Wrong Password'
-      });
-    }else{
-     res.send({
-        message:'Succesfull',
-        type: userName.type
-        });
-    }
-    */
 }
 
 

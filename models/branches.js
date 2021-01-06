@@ -28,7 +28,6 @@ module.exports = db => {
         return this.create(branch);
     };
 
-// TODO//
 schema.statics.REQUEST = async function () {
     const args = Array.from(arguments);
     if (args.length === 0) {

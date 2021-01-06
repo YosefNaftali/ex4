@@ -1,13 +1,7 @@
-//td
-// let users = require('../data/users');
-// let branches = require('../data/branches');
-//
 
 const debug = require("debug")("mongo:listusers");
 const User = require('../models')("users");  
 const branches = require('../models')("branches"); 
-
-
 const timeout = require("../timeout");
 
 

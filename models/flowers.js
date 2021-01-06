@@ -6,7 +6,7 @@ module.exports = db => {
     let schema = new mongo.Schema({
         name: { type: String, required: true },
         price: { type: String, required: true },
-        picture: { type: String, required: false },
+        picture: { type: String, required: false },// picture now is a relative pass like "images\\Lili.jpg"
         created_at: Date,
         updated_at: Date
     }, { autoIndex: false });

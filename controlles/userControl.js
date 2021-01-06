@@ -1,8 +1,5 @@
-//to-do: delete this 
-//let users = require('../data/users');
-//let branches = require('../data/branches');
+
 const branches = require('../models')("branches"); 
-//
 const debug = require("debug")("mongo:listusers");
 const User = require('../models')("users");  
 
@@ -12,8 +9,7 @@ const timeout = require("../timeout");
 const addUser = async function(req,res,next){
     console.log("im adding")
     let branchNumber;
-    //find free id
-   // let i=1;
+    // TO DO : find free id
     let id=0;
     try{
       let users= await User.REQUEST();
@@ -33,7 +29,6 @@ const addUser = async function(req,res,next){
       console.log("this user we want to add? "+JSON.stringify(user) )
       await User.CREATE(user);
       console.log('User created:' + user);
-      //users.push(user);
       res.status(200).send({message:'Success', user:user});
       console.log("im done adding and send");
     }catch (err) { debug(`Failed: ${err}`) }
@@ -54,20 +49,9 @@ const getUsers = async function(req,res,next){
         let newUsers = tempUsers.filter((user)=> {return user.valid !=='0'&& user.type == 'customer'|| user.type == 'Customer'});
         res.send(newUsers);
       }
-        //console.dir(users, { showHidden: true, colors: true });
     } catch (err) { debug(`Failed: ${err}`) }
 
     await timeout(1000);
-    /*
-    // Inquire the users one-by-one and provide a callback to process each one
-    try {
-        let index = 0;
-        await User.REQUEST(async user => console.log(`Data ${++index}:\n${user}`));
-        console.log('Finished');
-        process.exit(0);
-    } catch (err) { debug(`Failed: ${err}`) }
-    process.exit(0);
-    */
    
 }
 
@@ -77,16 +61,11 @@ const removeUser = async function(req,res,next){
         console.log('User id to remove:' + Object.values(req.body));
     } catch(err) { throw err; }
    console.log(req.body);
-
-  // let user = users.find( ({id}) => id == req.body.userId);
-  // user.valid = '0';
- //  res.send({message:'Success'})
 }
 
 
 const updateUser = async function(req,res,next){
  try {
-      //  await User.UPDATE(Object.values(req.body));
       await User.UPDATE(req.body);
         console.log('User to update:'+ JSON.stringify(req.body));
     } catch(err) { throw err; }
@@ -106,18 +85,7 @@ const usersManagement = async function(req,res,next){
       console.log(tempUsers);
       console.log(" the number (length) of users: "+tempUsers.length);
       let user = tempUsers.find((user)=>user.userName == req.query.user);
-/*
-      for(var i = 0; i < tempUsers.length ; i++){
-     //   console.log(" cur object in loop : "+tempUsers[i]);
-     //   console.log(" cur object to equal in loop : "+req.query.user);
 
-        if (tempUsers[i].userName == req.query.user){
-          user=tempUsers[i];
-       //   console.log(" res user in loop "+JSON.stringify(user));
-       //   console.log(" original in loop "+JSON.stringify(tempUsers[0])) 
-        }
-      }
-      */
       console.log("this is what find() return in DB : ");
       console.log(user);
       console.log("the user type is: "+user.type);
